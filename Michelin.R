@@ -2,9 +2,13 @@
 # Created by: Eric Leung, Bryan Martinez, Jackson Chen
 
 library(tidyverse)
-one_star <- read.csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/one-star-michelin-restaurants.csv")
-two_star <- read.csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/two-stars-michelin-restaurants.csv")
-three_star <- read.csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/three-stars-michelin-restaurants.csv")
+one_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/one-star-michelin-restaurants.csv")
+two_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/two-stars-michelin-restaurants.csv")
+three_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/three-stars-michelin-restaurants.csv")
+
+# one_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
+# two_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
+# three_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
 
 columns.to.keep <- c("name", "latitude", "longitude", "city", "region", "cuisine", "price")
 
@@ -29,12 +33,24 @@ all_restaurants %>%
 
 all_restaurants %>%
   filter(city == "Wien") %>%
-  ggplot(aes(x = cuisine,
-            y = region)) +
+  ggplot(aes(x = city,
+            y = cuisine)) +
   geom_point() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
+### Bar Graph to show Cuisines vs price and stars
+# Show for the city of Wien
+all_restaurants %>% 
+  filter(city == "Wien") %>% 
+  ggplot(aes(x = stars)) +
+  geom_bar()
+
+### Grouped bar graph
+all_restaurants %>% 
+  filter(city == "Wien") %>% 
+  ggplot(aes(fill = stars, x = cuisine)) +
+  geom_bar(position = "dodge")
 
 
 
