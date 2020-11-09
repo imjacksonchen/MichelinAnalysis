@@ -23,28 +23,18 @@ all_restaurants$city <- str_remove_all(all_restaurants$city, "\\-")
 all_restaurants$city <- str_remove_all(all_restaurants$city, "[:digit:]")
 
 ui <- fluidPage(
-    
-    selectInput(inputId = "var1",
-                label = "Choose a city",
-                choices = all_restaurants$city),
 
     # selectizeInput(inputId = "var2",
     #                label = "Select your first variable",
     #                choices = c("city", "region", "cuisine", "stars")),
-    
-    selectInput(inputId = "var3",
-                   label = "Select your second variable",
-                   choices = c("city", "region", "cuisine", "stars", "price")),
-    
-    plotOutput(outputId = "plot1"),
-    
+
     selectInput(inputId = "var4",
                 label = "Choose a city",
-                choices = all_restaurants$city),
+                choices = sort(all_restaurants$city)),
     
     selectInput(inputId = "var5",
                 label = "Choose a variable",
-                choices = c("stars", "price", "cuisine")),
+                choices = c("stars", "price")),
     
     plotOutput(outputId =  "plot2"),
     
@@ -52,31 +42,22 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-    
-    # Plotting a geom point with city vs other variables
-    output$plot1 <- renderPlot({
-        all_restaurants %>%
-            filter(city == input$var1) %>%
-            ggplot(aes_string(x = "city",
-                              y = input$var3)) +
-            geom_point() +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1))
-    })
-    
+
     # Plotting a geom bar with city vs stars
     output$plot2 <- renderPlot({
         all_restaurants %>% 
             filter(city == input$var4) %>% 
             ggplot(aes_string(x = input$var5)) +
-            geom_bar()
+            geom_bar() 
     })
     
-    # PLotting a geom bar with amount cusines with how many stars
+    # PLotting a geom bar with amount cuisines with how many stars
     output$plot3 <- renderPlot({
         all_restaurants %>% 
             filter(city == input$var4) %>% 
             ggplot(aes(fill = stars, x = cuisine)) +
-            geom_bar(position = "dodge")
+            geom_bar(position = "dodge") +
+            scale_y_continuous(breaks=seq(1,20,1))
     })
 }
 

@@ -2,9 +2,9 @@
 # Created by: Eric Leung, Bryan Martinez, Jackson Chen
 
 library(tidyverse)
-one_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/one-star-michelin-restaurants.csv")
-two_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/two-stars-michelin-restaurants.csv")
-three_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/archive/three-stars-michelin-restaurants.csv")
+one_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
+two_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
+three_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
 
 # one_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
 # two_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
