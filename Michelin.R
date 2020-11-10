@@ -10,11 +10,11 @@ one_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/M
 two_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
 three_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
 
-columns.to.keep <- c("name", "latitude", "longitude", "city", "region", "cuisine", "price")
-
-one_star <- one_star[columns.to.keep]
-two_star <- two_star[columns.to.keep]
-three_star <- three_star[columns.to.keep]
+# columns.to.keep <- c("name", "latitude", "longitude", "city", "region", "cuisine", "price")
+# 
+# one_star <- one_star[columns.to.keep]
+# two_star <- two_star[columns.to.keep]
+# three_star <- three_star[columns.to.keep]
 
 one_star <- one_star %>%
   mutate(stars = "one")
