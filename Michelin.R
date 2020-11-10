@@ -2,13 +2,13 @@
 # Created by: Eric Leung, Bryan Martinez, Jackson Chen
 
 library(tidyverse)
-one_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
-two_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
-three_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
+# one_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
+# two_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
+# three_star <- read_csv("/Users/ericleung/Desktop/Midd Year 4/Semester 1/MATH 216/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
 
-# one_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
-# two_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
-# three_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
+one_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/one-star-michelin-restaurants.csv")
+two_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/two-stars-michelin-restaurants.csv")
+three_star <- read_csv("/Users/jacksonchen/Desktop/MATH216 Data Sci/Homework/HW4/MichelinAnalysis/michelin_analysis/three-stars-michelin-restaurants.csv")
 
 columns.to.keep <- c("name", "latitude", "longitude", "city", "region", "cuisine", "price")
 
@@ -25,6 +25,10 @@ three_star <- three_star %>%
 
 all_restaurants <- full_join(one_star, two_star)
 all_restaurants <- full_join(all_restaurants, three_star)
+all_restaurants$city <- str_remove_all(all_restaurants$city, "\\-")
+all_restaurants$city <- str_remove_all(all_restaurants$city, "[:digit:]")
+all_restaurants$city[153] <- "Hong Kong"
+all_restaurants$city[167] <- "Hong Kong"
 
 all_restaurants %>%
   ggplot(aes(x = cuisine)) +
