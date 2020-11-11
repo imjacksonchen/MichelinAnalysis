@@ -32,6 +32,16 @@ cutleryIcon <- makeIcon(iconUrl = "cutlery.png",
                         iconHeight = 30)
 
 ui <- fluidPage(
+    titlePanel("Exploring Michelin Star Restaurants"),
+    h5("NOTE: This dataset doesn't contain data from these cities:
+       Belgium, France, Germany, Italy, Japan, Luxembourg, Netherlands, 
+       Portugal, China, Spain, and Switzerland"),
+    
+    h5("In this first graph, we want to explore the distribution of cuisines at 
+       Michelin Star restaurants in a particular city, based either price or stars"),
+    
+    h6("Note: Certain cities such as San Francisco, New York, Hong Kong, and Singapore
+       has more Michelin Star restaurants than other cities."),
     
     selectInput(inputId = "var1",
                 label = "Choose a city for plot 1",
@@ -43,6 +53,10 @@ ui <- fluidPage(
     
     plotOutput(outputId = "plot2"),
     
+    
+    h5("In this second graph, we want to explore the distribution of cuisines at 
+       Michelin Star restaurants in a particular region, based either price or stars"),
+    
     selectInput(inputId = "var4",
                 label = "Choose a region for plot 2",
                 choices = all_restaurants$region),
@@ -53,16 +67,21 @@ ui <- fluidPage(
     
     plotOutput(outputId = "plot3"),
     
+    h5("In this third graph, we want to explore the distribution of cuisines based on stars"),
+    
     selectInput(inputId = "var6",
                 label = "Choose amount of star(s)",
                 choices = c("1", "2", "3")),
     
     plotOutput(outputId = "plot4"),
     
+    h3("Explore the different Michelin restaurants across the world!"),
+    
     selectInput(inputId = "var3",
                 label = "Choose amount of star(s)",
                 choices = c("1", "2", "3")),
     
+    h6("Click on a marker to view more info."),
     leafletOutput(outputId = "leaflet1")
 )
 
@@ -78,7 +97,7 @@ server <- function(input, output, session) {
             scale_y_continuous(breaks=seq(1,50,1)) +
             theme_classic() +
             theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-            ggtitle(paste("Different", toString(input$var2), "in", toString(input$var1), "based on cuisines"))
+            ggtitle(paste("Distribution of cuisines and", toString(input$var2), "in", toString(input$var1)))
     })
     
     output$plot3 <- renderPlot({
@@ -90,7 +109,7 @@ server <- function(input, output, session) {
             scale_y_continuous(breaks=seq(1,50,1)) +
             theme_classic() +
             theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-            ggtitle(paste("Different", toString(input$var2), "in", toString(input$var4), "based on cuisines"))
+            ggtitle(paste("Distribution of cuisines and", toString(input$var2), "in", toString(input$var4)))
     })
     
     ### Amount of stars based on cuisine
@@ -100,8 +119,8 @@ server <- function(input, output, session) {
             ggplot(aes(x = cuisine)) +
             geom_bar(position = "dodge") +
             coord_flip() +
-            theme_classic() +
-            theme(axis.text.y = element_text(size = 7))
+            theme(axis.text.y = element_text(size = 7)) +
+            ggtitle(paste("Distribution of cusines with", input$var6, "stars"))
     })    
     
     # Creating Map with restaurants filtered by # of stars
