@@ -35,10 +35,10 @@ ui <- fluidPage(
     titlePanel("Exploring Michelin Star Restaurants"),
     h5("NOTE: This dataset doesn't contain data from these cities:
        Belgium, France, Germany, Italy, Japan, Luxembourg, Netherlands, 
-       Portugal, China, Spain, and Switzerland"),
+       Portugal, China, Spain, and Switzerland."),
     
     h5("In this first graph, we want to explore the distribution of cuisines at 
-       Michelin Star restaurants in a particular city, based either price or stars"),
+       Michelin Star restaurants in a particular city, based either price or stars."),
     
     h6("Note: Certain cities such as San Francisco, New York, Hong Kong, and Singapore
        has more Michelin Star restaurants than other cities."),
@@ -55,7 +55,9 @@ ui <- fluidPage(
     
     
     h5("In this second graph, we want to explore the distribution of cuisines at 
-       Michelin Star restaurants in a particular region, based either price or stars"),
+       Michelin Star restaurants in a particular region, based either price or stars."),
+    h5("By looking broadly at regions and not cities, we can see popular cuisine
+       trends in a larger area."),
     
     selectInput(inputId = "var4",
                 label = "Choose a region for plot 2",
@@ -67,7 +69,9 @@ ui <- fluidPage(
     
     plotOutput(outputId = "plot3"),
     
-    h5("In this third graph, we want to explore the distribution of cuisines based on stars"),
+    h5("In this third graph, we want to explore the distribution of cuisines based on stars.
+       We can see that contemporary cuisine dominates in 2-star and 3-star restaurants while
+       modern cuisine dominates 1-star restaurants."),
     
     selectInput(inputId = "var6",
                 label = "Choose amount of star(s)",
