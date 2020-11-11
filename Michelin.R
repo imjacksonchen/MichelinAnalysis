@@ -57,6 +57,13 @@ all_restaurants %>%
   geom_bar(position = "dodge")
 
 
+### Amount of stars based on cuisine
+all_restaurants %>% 
+  filter(stars == "one") %>% 
+  ggplot(aes(x = cuisine)) +
+  geom_bar(position = "dodge") +
+  # theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 
 
 
