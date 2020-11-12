@@ -1,0 +1,12 @@
+name: michelin_analysis
+title: michelin_analysis
+username:
+account: eleung
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3214559
+bundleId: 3849872
+url: https://eleung.shinyapps.io/michelin_analysis/
+when: 1605146898.68496
+asMultiple: FALSE
+asStatic: FALSE

@@ -1,6 +1,7 @@
 library(shiny)
 library(tidyverse)
 library(leaflet)
+library(stringr)
 
 one_star <- read_csv("one-star-michelin-restaurants.csv")
 two_star <- read_csv("two-stars-michelin-restaurants.csv")
@@ -25,6 +26,10 @@ all_restaurants$city <- str_remove_all(all_restaurants$city, "\\-")
 all_restaurants$city <- str_remove_all(all_restaurants$city, "[:digit:]")
 all_restaurants$city[153] <- "Hong Kong"
 all_restaurants$city[167] <- "Hong Kong"
+all_restaurants$cuisine <- all_restaurants$cuisine %>%
+    str_replace_all("creative", "Creative")
+all_restaurants$cuisine <- all_restaurants$cuisine %>%
+    str_replace_all("modern", "Modern cuisine")
 
 # credit for image to Freepik at flaticon.com
 cutleryIcon <- makeIcon(iconUrl = "cutlery.png",
@@ -33,60 +38,69 @@ cutleryIcon <- makeIcon(iconUrl = "cutlery.png",
 
 ui <- fluidPage(
     titlePanel("Exploring Michelin Star Restaurants"),
-    h5("NOTE: This dataset doesn't contain data from these cities:
+    h5("Made by: Bryan Brito-Martinez, Jackson Chen, Eric Leung"),
+    h3("NOTE: This dataset doesn't contain data from these countries:
        Belgium, France, Germany, Italy, Japan, Luxembourg, Netherlands, 
        Portugal, China, Spain, and Switzerland."),
     
-    h5("In this first graph, we want to explore the distribution of cuisines at 
-       Michelin Star restaurants in a particular city, based either price or stars."),
-    
-    h6("Note: Certain cities such as San Francisco, New York, Hong Kong, and Singapore
-       has more Michelin Star restaurants than other cities."),
-    
-    selectInput(inputId = "var1",
-                label = "Choose a city for plot 1",
-                choices = all_restaurants$city),
-    
-    selectInput(inputId = "var2",
-                label = "Choose a variable plot 1",
-                choices = c("stars", "price")),
-    
-    plotOutput(outputId = "plot2"),
-    
-    
-    h5("In this second graph, we want to explore the distribution of cuisines at 
-       Michelin Star restaurants in a particular region, based either price or stars."),
-    h5("By looking broadly at regions and not cities, we can see popular cuisine
+    tabsetPanel(
+        tabPanel("Distribution of Cuisines in Cities", 
+                 h3("In this first graph, we want to explore the distribution of cuisines at 
+                    Michelin Star restaurants in a particular city, based on either price or stars."),
+                 
+                 h4("Note: Certain cities such as San Francisco, New York, Hong Kong, and Singapore
+                    have more Michelin Star restaurants than other cities and some cities are missing
+                    price values."),
+                 
+                 selectInput(inputId = "var1",
+                             label = "Choose a city for plot 1",
+                             choices = all_restaurants$city),
+                 
+                 selectInput(inputId = "var2",
+                             label = "Choose a variable plot 1",
+                             choices = c("stars", "price")),
+                 
+                 plotOutput(outputId = "plot2")),
+        tabPanel("Distribution of Cuisines in Regions", 
+                 h3("In this second graph, we want to explore the distribution of cuisines at 
+       Michelin Star restaurants in a particular region, based on either price or stars."),
+                 h3("By looking broadly at regions and not cities, we can see popular cuisine
        trends in a larger area."),
-    
-    selectInput(inputId = "var4",
-                label = "Choose a region for plot 2",
-                choices = all_restaurants$region),
-    
-    selectInput(inputId = "var5",
-                label = "Choose a variable plot 2",
-                choices = c("stars", "price")),
-    
-    plotOutput(outputId = "plot3"),
-    
-    h5("In this third graph, we want to explore the distribution of cuisines based on stars.
+                 h5("NOTE: Restaurants in the United Kingdom and Ireland do not have a listed
+                    price value in the data set."),
+                 
+                 selectInput(inputId = "var4",
+                             label = "Choose a region for plot 2",
+                             choices = all_restaurants$region),
+                 
+                 selectInput(inputId = "var5",
+                             label = "Choose a variable plot 2",
+                             choices = c("stars", "price")),
+                 
+                 plotOutput(outputId = "plot3")),
+        
+        tabPanel("Distribution of Cuisines within Stars",
+                 h3("In this third graph, we want to explore the distribution of cuisines based on stars.
        We can see that contemporary cuisine dominates in 2-star and 3-star restaurants while
        modern cuisine dominates 1-star restaurants."),
+                 
+                 selectInput(inputId = "var6",
+                             label = "Choose amount of star(s)",
+                             choices = c("1", "2", "3")),
+                 
+                 plotOutput(outputId = "plot4")),
+        
+        tabPanel("Map of Global Michelin Star Restaurants",
+                 h1("Explore the different Michelin restaurants across the world!"),
+                 
+                 selectInput(inputId = "var3",
+                             label = "Choose amount of star(s)",
+                             choices = c("1", "2", "3")),
+                 
+                 h4("Click on a marker to view more info."),
+                 leafletOutput(outputId = "leaflet1"), height = 600)
+    )
     
-    selectInput(inputId = "var6",
-                label = "Choose amount of star(s)",
-                choices = c("1", "2", "3")),
-    
-    plotOutput(outputId = "plot4"),
-    
-    h3("Explore the different Michelin restaurants across the world!"),
-    
-    selectInput(inputId = "var3",
-                label = "Choose amount of star(s)",
-                choices = c("1", "2", "3")),
-    
-    h6("Click on a marker to view more info."),
-    leafletOutput(outputId = "leaflet1")
 )
 
 server <- function(input, output, session) {
@@ -100,9 +114,10 @@ server <- function(input, output, session) {
             scale_fill_manual(values=c("#CD7F32", "#C0C0C0", "gold", "deepskyblue", "firebrick2")) +
             scale_y_continuous(breaks=seq(1,50,1)) +
             theme_classic() +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+            theme(text = element_text(size=20),
+                  axis.text.x = element_text(angle = 45, hjust = 1)) +
             ggtitle(paste("Distribution of cuisines and", toString(input$var2), "in", toString(input$var1)))
-    })
+    },height = 500)
     
     output$plot3 <- renderPlot({
         all_restaurants %>% 
@@ -112,9 +127,10 @@ server <- function(input, output, session) {
             scale_fill_manual(values=c("#CD7F32", "#C0C0C0", "gold", "deepskyblue", "firebrick2")) +
             scale_y_continuous(breaks=seq(1,50,1)) +
             theme_classic() +
-            theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+            theme(text = element_text(size=20),
+                  axis.text.x = element_text(angle = 45, hjust = 1)) +
             ggtitle(paste("Distribution of cuisines and", toString(input$var2), "in", toString(input$var4)))
-    })
+    },height = 750)
     
     ### Amount of stars based on cuisine
     output$plot4 <- renderPlot({
@@ -123,9 +139,11 @@ server <- function(input, output, session) {
             ggplot(aes(x = cuisine)) +
             geom_bar(position = "dodge") +
             coord_flip() +
-            theme(axis.text.y = element_text(size = 7)) +
+            theme(text = element_text(size=20),
+                  axis.text.y = element_text(size = 18)) +
+            scale_y_continuous(breaks=seq(0,105,5)) +
             ggtitle(paste("Distribution of cusines with", input$var6, "stars"))
-    })    
+    }, height = 1000)    
     
     # Creating Map with restaurants filtered by # of stars
     output$leaflet1 <- renderLeaflet({
